@@ -14,7 +14,7 @@ def read_acc(sent=0.00061):
 
 def write_to_csv(filename, file_dict, data):
   file_folder = "data"
-  file_path = f"{file_folder}/{file_dict}/{filename}"
+  file_path = f"{file_folder}/{file_dict}/{filename}.csv"
 
   with open(file_path, 'a') as file:
     writer = csv.writer(file)
@@ -46,7 +46,7 @@ def main():
       if toggle_state == True:
         print("Recording data")
       else:
-        print("Data off")
+        print("Recording Off")
       
     last_state = current_state
     

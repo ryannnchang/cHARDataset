@@ -3,6 +3,7 @@ import time
 import RPi.GPIO as GPIO
 import datetime
 import csv
+import qwiic_oled
 
 def read_acc(sent=0.00061):
   ax, ay, az, gx, gy, gz = lsm.get_readings()
@@ -20,11 +21,30 @@ def write_to_csv(filename, file_dict, data):
     writer = csv.writer(file)
     writer.writerow([data[0], data[1], data[2], data[3], data[4]])
 
+def display(word):
+	myOLED.clear(myOLED.PAGE)
+	myOLED.print(word)
+	myOLED.set_cursor(0,0)
+	myOLED.display()
+  
+def off():
+  myOLED.clear(myOLED.ALL)
+
+
+
+#Intialize screen
+myOLED = qwiic_oled.QwiicMicroOled()
+myOLED.begin()
+myOLED.clear(myOLED.ALL)
+myOLED.clear(myOLED.PAGE)
+
+
+
 def main():
   # Ask for FileNames
-  file_dict = str(input("Enter the motion name for data storage: "))
-  filename = str(input("Enter the filename for data storage: "))
-
+  file_dict = str(input("Enter the motion: "))
+  filename = str(input("Enter the filename: "))
+  
   #Initialize GPIO
   global lsm
   lsm = LSM6DS3()
@@ -44,9 +64,11 @@ def main():
     if last_state == True and current_state == False:
       toggle_state = not toggle_state
       if toggle_state == True:
-        print("Recording data")
+        print("Recording...")
+        display("Recording...")
       else:
-        print("Recording Off")
+        print("Off")
+        display("Off")
       
     last_state = current_state
     
@@ -57,5 +79,8 @@ def main():
       time.sleep(0.02)
       
       write_to_csv(filename, file_dict, data)
-
+    
 main()
+off()
+
+

@@ -5,7 +5,7 @@ import datetime
 import csv
 import qwiic_oled
 
-def read_acc(sent=0.00061):
+def read_acc(sent=0.000061):
   ax, ay, az, gx, gy, gz = lsm.get_readings()
   ax = ax * sent
   ay = ay * sent
